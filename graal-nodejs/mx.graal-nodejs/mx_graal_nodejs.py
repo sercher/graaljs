@@ -569,7 +569,10 @@ mx_sdk.register_graalvm_component(mx_sdk.GraalVmLanguage(
     license_files=['LICENSE_GRAALNODEJS.txt'],
     third_party_license_files=['THIRD_PARTY_LICENSE_GRAALNODEJS.txt'],
     dependencies=['Graal.js'],
-    truffle_jars=['graal-nodejs:TRUFFLENODE'],
+    truffle_jars=[
+        'graal-nodejs:TRUFFLENODE',
+        *(['wasm:WASM'] if _is_wasm_available() else []),
+    ],
     support_distributions=['graal-nodejs:TRUFFLENODE_GRAALVM_SUPPORT'],
     provided_executables=[
         'bin/<exe:node>',
@@ -581,7 +584,10 @@ mx_sdk.register_graalvm_component(mx_sdk.GraalVmLanguage(
     library_configs=[
         mx_sdk_vm.LibraryConfig(
             destination='lib/<lib:graal-nodejs>',
-            jar_distributions=['graal-nodejs:TRUFFLENODE'],
+            jar_distributions=[
+                'graal-nodejs:TRUFFLENODE',
+                *(['wasm:WASM'] if _is_wasm_available() else []),
+            ],
             build_args=[
                 '--tool:all',
                 '--language:nodejs',
