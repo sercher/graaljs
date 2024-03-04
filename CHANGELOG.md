@@ -5,6 +5,9 @@ The main focus is on user-observable behavior of the engine.
 Changelog may include unreleased versions.
 See [version roadmap](https://www.graalvm.org/release-notes/version-roadmap/) for release dates.
 
+## Version 23.0.4
+* Updated Node.js to version 18.19.1.
+
 ## Version 23.0.3
 * Updated Node.js to version 18.18.2.
 
