@@ -1,4 +1,4 @@
-/* auto-generated on 2023-07-23 15:03:22 -0400. Do not edit! */
+/* auto-generated on 2023-08-26 17:38:28 -0400. Do not edit! */
 /* begin file src/ada.cpp */
 #include "ada.h"
 /* begin file src/checkers.cpp */
@@ -11235,6 +11235,7 @@ final:
   } else {
     host = ada::serializers::ipv4(ipv4);  // We have to reserialize the address.
   }
+  host_type = IPV4;
   return true;
 }
 
@@ -11464,6 +11465,7 @@ bool url::parse_ipv6(std::string_view input) {
   }
   host = ada::serializers::ipv6(address);
   ada_log("parse_ipv6 ", *host);
+  host_type = IPV6;
   return true;
 }
 
@@ -12573,7 +12575,6 @@ result_type parse_url(std::string_view user_input,
         // If c is U+002F (/) and remaining starts with U+002F (/),
         // then set state to special authority ignore slashes state and increase
         // pointer by 1.
-        state = ada::state::SPECIAL_AUTHORITY_IGNORE_SLASHES;
         std::string_view view = helpers::substring(url_data, input_position);
         if (ada::checkers::begins_with(view, "//")) {
           input_position += 2;
@@ -14025,6 +14026,7 @@ final:
     update_base_hostname(
         ada::serializers::ipv4(ipv4));  // We have to reserialize the address.
   }
+  host_type = IPV4;
   ADA_ASSERT_TRUE(validate());
   return true;
 }
@@ -14260,6 +14262,7 @@ bool url_aggregator::parse_ipv6(std::string_view input) {
   update_base_hostname(ada::serializers::ipv6(address));
   ada_log("parse_ipv6 ", get_hostname());
   ADA_ASSERT_TRUE(validate());
+  host_type = IPV6;
   return true;
 }
 
@@ -14894,6 +14897,11 @@ void ada_free(ada_url result) noexcept {
   delete r;
 }
 
+ada_url ada_copy(ada_url input) noexcept {
+  ada::result<ada::url_aggregator>& r = get_instance(input);
+  return new ada::result<ada::url_aggregator>(r);
+}
+
 bool ada_is_valid(ada_url result) noexcept {
   ada::result<ada::url_aggregator>& r = get_instance(result);
   return r.has_value();
@@ -15009,6 +15017,14 @@ ada_string ada_get_protocol(ada_url result) noexcept {
   }
   std::string_view out = r->get_protocol();
   return ada_string_create(out.data(), out.length());
+}
+
+uint8_t ada_get_url_host_type(ada_url result) noexcept {
+  ada::result<ada::url_aggregator>& r = get_instance(result);
+  if (!r) {
+    return 0;
+  }
+  return r->host_type;
 }
 
 bool ada_set_href(ada_url result, const char* input, size_t length) noexcept {
