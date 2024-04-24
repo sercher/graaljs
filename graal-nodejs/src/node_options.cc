@@ -400,7 +400,7 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             &EnvironmentOptions::experimental_wasm_modules,
             kAllowedInEnvvar);
   AddOption("--experimental-import-meta-resolve",
-            "experimental ES Module import.meta.resolve() support",
+            "experimental ES Module import.meta.resolve() parentURL support",
             &EnvironmentOptions::experimental_import_meta_resolve,
             kAllowedInEnvvar);
   AddOption("--experimental-policy",
