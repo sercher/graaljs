@@ -14,7 +14,6 @@ const {
 
 const {
   getOptionValue,
-  getEmbedderOptions,
   refreshOptions,
 } = require('internal/options');
 const { reconnectZeroFillToggle } = require('internal/buffer');
@@ -74,6 +73,7 @@ function prepareExecution(options) {
   initializeReport();
   initializeSourceMapsHandlers();
   initializeDeprecations();
+
   require('internal/dns/utils').initializeDns();
 
   setupSymbolDisposePolyfill();
@@ -275,8 +275,9 @@ function setupFetch() {
   }
 
   // The WebAssembly Web API: https://webassembly.github.io/spec/web-api
-  const { wasmStreamingCallback } = require('internal/wasm_web_api');
-  internalBinding('wasm_web_api').setImplementation(wasmStreamingCallback);
+  internalBinding('wasm_web_api').setImplementation((streamState, source) => {
+    require('internal/wasm_web_api').wasmStreamingCallback(streamState, source);
+  });
   require('internal/graal/wasm');
 }
 
@@ -334,12 +335,12 @@ function setupStacktracePrinterOnSigint() {
 }
 
 function initializeReport() {
-  const { report } = require('internal/process/report');
   ObjectDefineProperty(process, 'report', {
     __proto__: null,
     enumerable: true,
     configurable: true,
     get() {
+      const { report } = require('internal/process/report');
       return report;
     },
   });
@@ -354,9 +355,10 @@ function setupDebugEnv() {
 
 // This has to be called after initializeReport() is called
 function initializeReportSignalHandlers() {
-  const { addSignalHandler } = require('internal/process/report');
-
-  addSignalHandler();
+  if (getOptionValue('--report-on-signal')) {
+    const { addSignalHandler } = require('internal/process/report');
+    addSignalHandler();
+  }
 }
 
 function initializeHeapSnapshotSignalHandlers() {
@@ -555,8 +557,6 @@ function initializeCJSLoader() {
 }
 
 function initializeESMLoader() {
-  if (getEmbedderOptions().shouldNotRegisterESMLoader) return;
-
   const { initializeESM } = require('internal/modules/esm/utils');
   initializeESM();
 
