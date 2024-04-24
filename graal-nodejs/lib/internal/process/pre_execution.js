@@ -393,7 +393,6 @@ function setupTraceCategoryState() {
 }
 
 function setupPerfHooks() {
-  require('internal/perf/performance').refreshTimeOrigin();
   require('internal/perf/utils').refreshTimeOrigin();
 }
 
