@@ -50,7 +50,6 @@ const expectedModules = new Set([
   'NativeModule internal/fs/utils',
   'NativeModule internal/graal/buffer',
   'NativeModule internal/graal/wasm',
-  'NativeModule internal/idna',
   'NativeModule internal/linkedlist',
   'NativeModule internal/modules/cjs/loader',
   'NativeModule internal/modules/esm/utils',
@@ -86,12 +85,16 @@ const expectedModules = new Set([
   'NativeModule path',
   'NativeModule querystring',
   'NativeModule timers',
-  'NativeModule url',
   'NativeModule internal/v8/startup_snapshot',
   'NativeModule util',
 ]);
 
-if (!common.isMainThread) {
+if (common.isMainThread) {
+  [
+    'NativeModule internal/idna',
+    'NativeModule url',
+  ].forEach(expectedModules.add.bind(expectedModules));
+} else {
   [
     'Internal Binding messaging',
     'Internal Binding performance',
@@ -134,8 +137,6 @@ if (common.isWindows) {
 
 if (common.hasIntl) {
   expectedModules.add('Internal Binding icu');
-} else {
-  expectedModules.add('NativeModule url');
 }
 
 if (process.features.inspector) {
