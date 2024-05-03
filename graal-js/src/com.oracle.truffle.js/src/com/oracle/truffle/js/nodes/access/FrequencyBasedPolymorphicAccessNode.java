@@ -209,7 +209,7 @@ abstract class FrequencyBasedPolymorphicAccessNode<T extends PropertyCacheNode<?
         @Override
         protected void setHighFrequencyNode(int position, Object key) {
             CompilerDirectives.transferToInterpreterAndInvalidate();
-            highFrequencyKeys[position] = insert(PropertySetNode.createImpl(key, false, getJSContext(), strict, setOwn, JSAttributes.getDefault(), false, superProperty));
+            highFrequencyKeys[position] = insert(PropertySetNode.createImpl(key, false, getLanguage().getJSContext(), strict, setOwn, JSAttributes.getDefault(), false, superProperty));
         }
 
         public boolean executeFastSet(JSDynamicObject target, Object key, Object value, Object receiver, TruffleString.EqualNode equalsNode) {
@@ -271,7 +271,7 @@ abstract class FrequencyBasedPolymorphicAccessNode<T extends PropertyCacheNode<?
         @Override
         protected void setHighFrequencyNode(int position, Object key) {
             CompilerDirectives.transferToInterpreterAndInvalidate();
-            highFrequencyKeys[position] = insert(PropertyGetNode.create(key, getJSContext()));
+            highFrequencyKeys[position] = insert(PropertyGetNode.create(key, getLanguage().getJSContext()));
         }
 
         public Object executeFastGet(Object key, Object target, TruffleString.EqualNode equalsNode) {
