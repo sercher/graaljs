@@ -186,7 +186,7 @@ abstract class FrequencyBasedPolymorphicAccessNode<T extends PropertyCacheNode<?
 
         @NeverDefault
         public static FrequencyBasedPropertySetNode create(JSContext context, boolean setOwn, boolean isStrict, boolean superProperty) {
-            short size = context.getLanguageOptions().frequencyBasedPropertyCacheLimit();
+            short size = context.getContextOptions().getFrequencyBasedPropertyCacheLimit();
             if (size == 0) {
                 return DISABLED;
             }
@@ -251,7 +251,7 @@ abstract class FrequencyBasedPolymorphicAccessNode<T extends PropertyCacheNode<?
 
         @NeverDefault
         public static FrequencyBasedPropertyGetNode create(JSContext context) {
-            short size = context.getLanguageOptions().frequencyBasedPropertyCacheLimit();
+            short size = context.getContextOptions().getFrequencyBasedPropertyCacheLimit();
             if (size == 0) {
                 return DISABLED;
             }
