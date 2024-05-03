@@ -757,7 +757,7 @@ public final class JSContextOptions {
         this.unhandledRejectionsMode = readUnhandledRejectionsMode();
         this.newSetMethods = readBooleanOption(NEW_SET_METHODS);
         this.iteratorHelpers = getEcmaScriptVersion() >= JSConfig.ECMAScript2018 && readBooleanOption(ITERATOR_HELPERS);
-        this.atomicsWaitAsync = ATOMICS_WAIT_ASYNC.hasBeenSet(optionValues) ? readBooleanOption(ATOMICS_WAIT_ASYNC) : getEcmaScriptVersion() >= JSConfig.ECMAScript2024;
+        this.atomicsWaitAsync = ATOMICS_WAIT_ASYNC.hasBeenSet(optionValues) && readBooleanOption(ATOMICS_WAIT_ASYNC);
         this.shadowRealm = getEcmaScriptVersion() >= JSConfig.ECMAScript2015 && readBooleanOption(SHADOW_REALM);
         this.operatorOverloading = readBooleanOption(OPERATOR_OVERLOADING);
         this.errorCause = ERROR_CAUSE.hasBeenSet(optionValues) ? readBooleanOption(ERROR_CAUSE) : getEcmaScriptVersion() >= JSConfig.ECMAScript2022;
